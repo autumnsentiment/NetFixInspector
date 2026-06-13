@@ -90,4 +90,5 @@ try {
     Copy-Item -Force (Join-Path $built "NetFixInspector.exe") (Join-Path $resolvedOut "NetFixInspector.exe")
 }
 Copy-Item -Force .\README_zh.md (Join-Path $resolvedOut "README_zh.md")
+Copy-Item -Force .\LICENSE (Join-Path $resolvedOut "LICENSE")
 Write-Host "Electron output: $resolvedOut"

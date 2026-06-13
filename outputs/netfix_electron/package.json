@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "NetFixInspector Electron Chinese desktop shell",
   "main": "src/main.js",
+  "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
     "start": "electron .",

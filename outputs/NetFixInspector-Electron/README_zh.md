@@ -44,3 +44,9 @@ NetFixInspector-Electron\resources\support\third_party\npcap\
 桌面界面会显示“Npcap 安装器：已内置”，点击“安装内置 Npcap”时优先运行包内安装器。若未放入授权安装器，按钮会打开 Npcap 官方下载页。
 
 不要把公开免费的 Npcap 安装器/驱动直接塞入第三方发布包，除非你的 Npcap 授权允许这样分发。后端会运行时动态检测 Npcap；未安装时 DHCP 抓包和内网回路抓包检测会降级或提示跳过，其他检测照常可用。
+
+## 许可证
+
+本项目采用 MIT 风格的非商业许可证，详见 `LICENSE` 或仓库根目录 `LICENSE`。
+
+禁止任何商业用途。标准 MIT License 本身允许商用，因此本项目的许可证不是标准 MIT/OSI 开源许可证；如需商业使用、商业分发、付费集成、托管服务或其他商业用途，请先取得作者书面授权。

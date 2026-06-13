@@ -85,3 +85,9 @@ sudo ./netfix-linux.sh scan --interface eth0 --dhcp-active --output report.json
 - `INFO`：信息或修复预演
 
 默认所有修复都是 dry-run；只有加 `--apply` 才会修改系统。
+
+## 许可证
+
+本项目采用 MIT 风格的非商业许可证，详见 `LICENSE`。
+
+禁止任何商业用途。标准 MIT License 本身允许商用，因此本项目的许可证不是标准 MIT/OSI 开源许可证；如需商业使用、商业分发、付费集成、托管服务或其他商业用途，请先取得作者书面授权。

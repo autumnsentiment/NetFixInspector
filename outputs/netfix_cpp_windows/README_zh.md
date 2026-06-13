@@ -75,3 +75,9 @@ powershell -ExecutionPolicy Bypass -File .\build_windows_cpp.ps1
 ```
 
 `-WithNpcap` 参数保留兼容旧命令，但现在 Npcap 是运行时动态加载，不需要 SDK 链接。
+
+## 许可证
+
+本项目采用 MIT 风格的非商业许可证，详见 `LICENSE` 或仓库根目录 `LICENSE`。
+
+禁止任何商业用途。标准 MIT License 本身允许商用，因此本项目的许可证不是标准 MIT/OSI 开源许可证；如需商业使用、商业分发、付费集成、托管服务或其他商业用途，请先取得作者书面授权。

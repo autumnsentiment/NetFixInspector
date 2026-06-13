@@ -47,6 +47,12 @@ chmod +x ./netfix-linux.sh
 
 Windows 抓包能力通过运行时动态加载 Npcap 启用。仓库不内置公开免费的 Npcap 驱动安装器；如需随产品分发，请使用 Npcap OEM 授权安装器，并放入 `work/netfix_electron/third_party/npcap/` 后重新构建 Electron 包。
 
+## 许可证
+
+本项目采用 MIT 风格的非商业许可证，详见 `LICENSE`。
+
+禁止任何商业用途。标准 MIT License 本身允许商用，因此本项目的许可证不是标准 MIT/OSI 开源许可证；如需商业使用、商业分发、付费集成、托管服务或其他商业用途，请先取得作者书面授权。
+
 ## 说明
 
 Windows App SDK/WinUI 封装已按当前要求移除；当前仓库保留 Electron 中文桌面版、C++ 控制台版、Linux 脚本版和打包产物。
