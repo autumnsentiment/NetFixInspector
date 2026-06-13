@@ -1,0 +1,33 @@
+{
+  "tool": "NetFix Inspector",
+  "version": "1.0.0",
+  "command": "repair",
+  "started_at": "2026-06-09T18:54:51",
+  "started_at_utc": "2026-06-09T10:54:51Z",
+  "host": {
+    "hostname": "DESKTOP-H75LF26",
+    "platform": "Windows 6.2.9200",
+    "system": "Windows",
+    "admin": false
+  },
+  "checks": [
+    {
+      "name": "Repair",
+      "status": "INFO",
+      "summary": "Prepared repair commands without changing the system.",
+      "details": {
+        "apply": "false"
+      },
+      "highlights": ["Note: Windows stack reset usually requires reboot.","Command: ipconfig /flushdns","Command: netsh winsock reset","Command: netsh int ip reset","Command: netsh int ipv6 reset"],
+      "recommendations": ["Dry run only. Re-run with --apply to execute these commands."]
+    }
+  ],
+  "finished_at": "2026-06-09T18:54:51",
+  "finished_at_utc": "2026-06-09T10:54:51Z",
+  "summary": {
+    "status": "INFO",
+    "counts": {
+      "INFO": 1
+    }
+  }
+}

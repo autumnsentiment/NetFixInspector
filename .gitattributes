@@ -1,0 +1,2 @@
+outputs/NetFixInspector-package.zip filter=lfs diff=lfs merge=lfs -text
+outputs/NetFixInspector-Electron/NetFixInspector.exe filter=lfs diff=lfs merge=lfs -text

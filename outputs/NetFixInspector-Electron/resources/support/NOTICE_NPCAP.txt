@@ -1,0 +1,30 @@
+Npcap packaging notice
+======================
+
+NetFixInspector supports Npcap, but the public/free Npcap installer and driver are not embedded in this zip.
+
+The exe dynamically loads wpcap.dll at runtime from:
+- C:\Windows\System32\Npcap\wpcap.dll
+- C:\Windows\System32\wpcap.dll
+- the normal DLL search path
+
+If Npcap is installed, DHCP packet capture and LAN loop/broadcast detection are enabled automatically.
+If Npcap is not installed, normal connectivity, DNS, NAT, IPv6, repair dry-run, and DHCP fallback checks still work.
+
+Redistribution note:
+Npcap OEM redistribution rights are required if you want to package the Npcap installer/driver inside a product distributed to other machines. Put your licensed OEM installer in third_party\npcap or beside Install-Npcap.bat, then run Install-Npcap.bat.
+
+Electron bundling:
+To build an Electron package with a bundled licensed Npcap installer, place your OEM installer at:
+
+  work\netfix_electron\third_party\npcap\npcap-oem.exe
+
+Then run:
+
+  powershell -ExecutionPolicy Bypass -File .\build_electron.ps1 -RequireBundledNpcap
+
+The installer will be copied into:
+
+  NetFixInspector-Electron\resources\support\third_party\npcap\
+
+The Electron UI prefers that bundled installer when the user clicks the Npcap install action.

@@ -1,0 +1,49 @@
+NetFixInspector quick start
+==========================
+
+Windows:
+  Double-click Run-NetFixInspector.bat or NetFixInspector.exe for the menu.
+
+  NetFixInspector.exe scan --skip-packet --no-external-inbound --output report.json
+  NetFixInspector.exe npcap --json
+  NetFixInspector.exe port --host example.com --port 443 --family both --count 3 --json
+  NetFixInspector.exe dhcp --active --timeout 5 --output dhcp.json
+  NetFixInspector.exe loop --seconds 15 --probes 5 --output loop.json
+  NetFixInspector.exe repair --interface "WLAN" --set-dns alidns
+  NetFixInspector.exe repair --interface "WLAN" --set-dns alidns --apply
+
+Windows one-click files:
+  Quick-Scan.bat
+  DNS-Check.bat
+  NAT-Check.bat
+  Port-Ping.bat
+  DHCP-Check.bat
+  DHCP-Active-Probe.bat
+  DHCP-Packet-Capture.bat
+  Loop-Detect.bat
+  Npcap-Status.bat
+  Install-Npcap.bat
+  Repair-DryRun.bat
+
+Npcap:
+  The exe dynamically loads Npcap at runtime. If Npcap is installed, DHCP packet capture and loop/broadcast checks enable automatically.
+  This package does not include the public/free Npcap driver installer. For redistribution, place your licensed Npcap OEM installer beside Install-Npcap.bat or in third_party\npcap.
+  Without Npcap, normal connectivity/DNS/NAT/IPv6/repair checks still work, and DHCP fallback still reads Windows DHCP state plus optional active Discover.
+
+Windows C++ source:
+  cd ..\netfix_cpp_windows
+  powershell -ExecutionPolicy Bypass -File .\verify_source.ps1
+  powershell -ExecutionPolicy Bypass -File .\build_windows_cpp.ps1
+  powershell -ExecutionPolicy Bypass -File .\build_windows_mingw.ps1
+
+Linux:
+  chmod +x ./netfix-linux.sh
+  python3 -m pip install -r requirements.txt
+  ./netfix-linux.sh scan --output report.json
+  ./netfix-linux.sh port --host example.com --port 443 --family both --count 3 --json
+  sudo ./netfix-linux.sh scan --interface eth0 --dhcp-active --output report.json
+
+Notes:
+  - Repair commands are dry-run by default. Add --apply to change the system.
+  - DHCP active probing and packet capture checks should be run as Administrator/root.
+  - IPv6 inbound testing uses a temporary TCP listener and check-host.net unless --no-external-inbound is used.

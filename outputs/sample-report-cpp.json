@@ -1,0 +1,112 @@
+{
+  "tool": "NetFix Inspector",
+  "version": "1.0.0",
+  "command": "scan",
+  "started_at": "2026-06-09T18:41:36",
+  "started_at_utc": "2026-06-09T10:41:36Z",
+  "host": {
+    "hostname": "DESKTOP-H75LF26",
+    "platform": "Windows 6.2.9200",
+    "system": "Windows",
+    "admin": false
+  },
+  "checks": [
+    {
+      "name": "Interface inventory",
+      "status": "OK",
+      "summary": "2 active interface(s), IPv4 addresses=2, global IPv6=0.",
+      "details": {
+        "active_interfaces": "2",
+        "global_ipv6": ""
+      },
+      "highlights": ["以太网 [down] IPv4=169.254.83.172 IPv6=fe80::447d:3531:b53b:295b","WLAN 2 [up] IPv4=192.168.1.167 IPv6=fe80::77d0:b321:1c8f:2111","WLAN [down] IPv4=169.254.30.59 IPv6=fe80::48b6:7d3e:fc3a:9971","蓝牙网络连接 [down] IPv4=169.254.252.197 IPv6=fe80::15cc:541b:a16e:ec73","Loopback Pseudo-Interface 1 [up] IPv4=127.0.0.1 IPv6=::1"],
+      "recommendations": []
+    },
+    {
+      "name": "Default route",
+      "status": "OK",
+      "summary": "IPv4 default=1, IPv6 default=0.",
+      "details": {
+      },
+      "highlights": ["IPv4 default routes: 1","IPv6 default routes: 0"],
+      "recommendations": []
+    },
+    {
+      "name": "Connectivity",
+      "status": "WARN",
+      "summary": "IPv4 outbound=ok, IPv6 outbound=failed.",
+      "details": {
+      },
+      "highlights": ["IPv4 Cloudflare HTTPS 1.1.1.1:443 fail (timed out)","IPv4 Google DNS TCP 8.8.8.8:53 ok","IPv4 AliDNS HTTPS 223.5.5.5:443 ok","IPv6 Cloudflare IPv6 HTTPS 2606:4700:4700::1111:443 fail (timed out)","IPv6 Google IPv6 DNS TCP 2001:4860:4860::8888:53 fail (timed out)","IPv6 AliDNS IPv6 HTTPS 2400:3200::1:443 fail (timed out)"],
+      "recommendations": ["IPv6 outbound connectivity failed or is not provisioned."]
+    },
+    {
+      "name": "System DNS",
+      "status": "OK",
+      "summary": "System DNS servers=5.",
+      "details": {
+        "servers": "202.96.134.33,202.96.128.86,fec0:0:0:ffff::1,fec0:0:0:ffff::2,fec0:0:0:ffff::3"
+      },
+      "highlights": ["System DNS: 202.96.134.33, 202.96.128.86, fec0:0:0:ffff::1, fec0:0:0:ffff::2, fec0:0:0:ffff::3"],
+      "recommendations": []
+    },
+    {
+      "name": "DNS",
+      "status": "WARN",
+      "summary": "Direct DNS successes=6/16.",
+      "details": {
+        "successes": "6",
+        "total": "16"
+      },
+      "highlights": ["1.1.1.1 A example.com: 172.66.147.243, 104.20.23.154","1.1.1.1 AAAA example.com: 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a","1.1.1.1 A cloudflare.com: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。","1.1.1.1 AAAA cloudflare.com: 2606:4700::6810:84e5, 2606:4700::6810:85e5","1.0.0.1 A example.com: 172.66.147.243, 104.20.23.154","1.0.0.1 AAAA example.com: 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a","1.0.0.1 A cloudflare.com: 104.16.132.229, 104.16.133.229","1.0.0.1 AAAA cloudflare.com: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。","2606:4700:4700::1111 A example.com: 向一个无法连接的网络尝试了一个套接字操作。","2606:4700:4700::1111 AAAA example.com: 向一个无法连接的网络尝试了一个套接字操作。","2606:4700:4700::1111 A cloudflare.com: 向一个无法连接的网络尝试了一个套接字操作。","2606:4700:4700::1111 AAAA cloudflare.com: 向一个无法连接的网络尝试了一个套接字操作。","2606:4700:4700::1001 A example.com: 向一个无法连接的网络尝试了一个套接字操作。","2606:4700:4700::1001 AAAA example.com: 向一个无法连接的网络尝试了一个套接字操作。","2606:4700:4700::1001 A cloudflare.com: 向一个无法连接的网络尝试了一个套接字操作。","2606:4700:4700::1001 AAAA cloudflare.com: 向一个无法连接的网络尝试了一个套接字操作。"],
+      "recommendations": ["Some direct DNS tests failed; compare IPv4/IPv6 resolver reachability and firewall policy."]
+    },
+    {
+      "name": "IPv4 NAT",
+      "status": "OK",
+      "summary": "Endpoint-independent IPv4 NAT mapping (cone-like; filtering not classified)",
+      "details": {
+        "unique_mappings": "183.27.96.89:29753"
+      },
+      "highlights": ["stun.l.google.com: 183.27.96.89:29753","stun1.l.google.com: 183.27.96.89:29753","stun.cloudflare.com: 183.27.96.89:29753"],
+      "recommendations": ["This test classifies mapping behavior. Full-cone vs restricted-cone filtering needs a cooperative STUN server."]
+    },
+    {
+      "name": "IPv6 stack",
+      "status": "WARN",
+      "summary": "Outbound=failed, inbound=not verified.",
+      "details": {
+      },
+      "highlights": ["Global IPv6 addresses: -","IPv6 outbound Cloudflare IPv6 HTTPS: timed out","IPv6 outbound Google IPv6 DNS TCP: timed out","IPv6 outbound AliDNS IPv6 HTTPS: timed out","IPv6 inbound external checker: skipped by --no-external-inbound"],
+      "recommendations": ["No global IPv6 address was detected; inbound IPv6 cannot work without one.","IPv6 outbound failed. Verify router advertisement, DHCPv6/prefix delegation, firewall, and DNS AAAA reachability."]
+    },
+    {
+      "name": "Packet-level LAN checks",
+      "status": "SKIP",
+      "summary": "DHCP and LAN loop packet checks were skipped by --skip-packet.",
+      "details": {
+      },
+      "highlights": [],
+      "recommendations": []
+    },
+    {
+      "name": "LAN health summary",
+      "status": "OK",
+      "summary": "No obvious LAN-side issue was detected.",
+      "details": {
+      },
+      "highlights": [],
+      "recommendations": []
+    }
+  ],
+  "finished_at": "2026-06-09T18:41:56",
+  "finished_at_utc": "2026-06-09T10:41:56Z",
+  "summary": {
+    "status": "WARN",
+    "counts": {
+      "OK": 5,
+      "SKIP": 1,
+      "WARN": 3
+    }
+  }
+}

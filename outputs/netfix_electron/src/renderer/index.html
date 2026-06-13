@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NetFixInspector</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div>
+          <h1>NetFixInspector</h1>
+          <p>网络检测与修复</p>
+        </div>
+      </div>
+
+      <div class="sidebar-note">
+        <strong>Windows 桌面版</strong>
+        <span>图形界面负责调度和展示，底层检测仍由原生 C++ 后端执行。</span>
+      </div>
+
+      <div class="action-list" id="actions"></div>
+
+      <section class="options">
+        <h2>检测选项</h2>
+        <label>
+          <span>超时秒数</span>
+          <input id="timeout" type="number" min="1" max="30" value="3">
+        </label>
+        <label>
+          <span>抓包秒数</span>
+          <input id="seconds" type="number" min="1" max="120" value="15">
+        </label>
+        <label>
+          <span>探测包数量</span>
+          <input id="probes" type="number" min="0" max="50" value="5">
+        </label>
+        <label>
+          <span>DNS 服务商</span>
+          <select id="provider">
+            <option value="cloudflare">Cloudflare</option>
+            <option value="alidns">AliDNS</option>
+            <option value="google">Google</option>
+            <option value="tencent">Tencent</option>
+            <option value="quad9">Quad9</option>
+          </select>
+        </label>
+        <label>
+          <span>网卡名称</span>
+          <input id="interfaceName" type="text" placeholder="可选，例如 WLAN 或 以太网">
+        </label>
+        <div class="option-group" id="portPingGroup">
+          <h3>端口 Ping</h3>
+          <label>
+            <span>目标主机</span>
+            <input id="portHost" type="text" placeholder="输入域名、IPv4 或 IPv6">
+          </label>
+          <div class="option-row">
+            <label>
+              <span>端口</span>
+              <input id="portNumber" type="number" min="1" max="65535" value="443">
+            </label>
+            <label>
+              <span>次数</span>
+              <input id="portCount" type="number" min="1" max="20" value="3">
+            </label>
+          </div>
+          <label>
+            <span>地址族</span>
+            <select id="portFamily">
+              <option value="both">IPv4 + IPv6</option>
+              <option value="ipv4">仅 IPv4</option>
+              <option value="ipv6">仅 IPv6</option>
+            </select>
+          </label>
+        </div>
+        <label class="check">
+          <input id="skipPacket" type="checkbox" checked>
+          <span>快速扫描跳过抓包</span>
+        </label>
+        <label class="check">
+          <input id="noExternalInbound" type="checkbox" checked>
+          <span>跳过外部 IPv6 入站检测</span>
+        </label>
+        <button class="secondary full" id="adminBtn">以管理员重新启动</button>
+        <button class="secondary full" id="installNpcapBtn">安装/修复 Npcap</button>
+      </section>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <h2>网络状态工作台</h2>
+          <p id="backendInfo">正在读取后端状态...</p>
+        </div>
+        <div class="status-pill" id="runState">准备就绪</div>
+      </header>
+
+      <section class="launch-panel" id="launchPanel">
+        <div>
+          <span>已选择功能</span>
+          <h3 id="selectedActionTitle">未选择</h3>
+          <p id="selectedActionDesc">从左侧选择功能后再开始运行。</p>
+        </div>
+        <button class="secondary primary" id="startSelectedBtn" disabled>开始</button>
+      </section>
+
+      <section class="summary-grid" id="summaryGrid">
+        <article class="metric">
+          <span>总体状态</span>
+          <strong id="overallStatus">未运行</strong>
+        </article>
+        <article class="metric">
+          <span>报告文件</span>
+          <strong id="reportFile">-</strong>
+        </article>
+        <article class="metric">
+          <span>管理员权限</span>
+          <strong id="adminState">-</strong>
+        </article>
+        <article class="metric">
+          <span>Npcap 安装器</span>
+          <strong id="npcapBundleState">检测中</strong>
+        </article>
+      </section>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="checks">检测结果</button>
+        <button class="tab" data-tab="json">JSON 报告</button>
+        <button class="tab" data-tab="log">执行日志</button>
+      </nav>
+
+      <section class="tab-panel active" id="checksPanel">
+        <div class="empty">
+          <h3>选择左侧功能开始检测</h3>
+          <p>默认所有修复操作都是预演；只有“执行修复”会加上 --apply。</p>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="jsonPanel">
+        <pre id="jsonText">{}</pre>
+      </section>
+
+      <section class="tab-panel" id="logPanel">
+        <pre id="logText">暂无日志</pre>
+      </section>
+
+      <footer class="footer">
+        <button class="secondary" id="installNpcapFooterBtn">安装/修复 Npcap</button>
+        <button class="secondary" id="openReportBtn">打开报告文件</button>
+        <button class="secondary" id="openReportsBtn">打开报告目录</button>
+      </footer>
+    </main>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

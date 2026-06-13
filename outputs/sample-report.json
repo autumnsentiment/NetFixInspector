@@ -1,0 +1,771 @@
+{
+  "tool": "NetFix Inspector",
+  "version": "1.0.0",
+  "command": "scan",
+  "started_at": "2026-06-09T18:10:08+08:00",
+  "started_at_utc": "2026-06-09T10:10:08+00:00",
+  "host": {
+    "hostname": "DESKTOP-H75LF26",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "system": "Windows",
+    "release": "10",
+    "machine": "AMD64",
+    "python": "3.11.9",
+    "admin": false
+  },
+  "checks": [
+    {
+      "name": "Interface inventory",
+      "status": "OK",
+      "summary": "2 active interface(s), IPv4 addresses=2, global IPv6=0.",
+      "details": {
+        "interfaces": [
+          {
+            "name": "以太网",
+            "is_up": false,
+            "speed_mbps": 0,
+            "mtu": 1500,
+            "ipv4": [
+              {
+                "address": "169.254.83.172",
+                "netmask": "255.255.0.0",
+                "broadcast": null
+              }
+            ],
+            "ipv6": [
+              {
+                "address": "fe80::447d:3531:b53b:295b",
+                "netmask": null,
+                "broadcast": null
+              }
+            ],
+            "mac": []
+          },
+          {
+            "name": "WLAN 2",
+            "is_up": true,
+            "speed_mbps": 4294,
+            "mtu": 1500,
+            "ipv4": [
+              {
+                "address": "192.168.1.167",
+                "netmask": "255.255.255.0",
+                "broadcast": null
+              }
+            ],
+            "ipv6": [
+              {
+                "address": "fe80::77d0:b321:1c8f:2111",
+                "netmask": null,
+                "broadcast": null
+              }
+            ],
+            "mac": []
+          },
+          {
+            "name": "WLAN",
+            "is_up": false,
+            "speed_mbps": 43,
+            "mtu": 1500,
+            "ipv4": [
+              {
+                "address": "169.254.30.59",
+                "netmask": "255.255.0.0",
+                "broadcast": null
+              }
+            ],
+            "ipv6": [
+              {
+                "address": "fe80::48b6:7d3e:fc3a:9971",
+                "netmask": null,
+                "broadcast": null
+              }
+            ],
+            "mac": []
+          },
+          {
+            "name": "蓝牙网络连接",
+            "is_up": false,
+            "speed_mbps": 3,
+            "mtu": 1500,
+            "ipv4": [
+              {
+                "address": "169.254.252.197",
+                "netmask": "255.255.0.0",
+                "broadcast": null
+              }
+            ],
+            "ipv6": [
+              {
+                "address": "fe80::15cc:541b:a16e:ec73",
+                "netmask": null,
+                "broadcast": null
+              }
+            ],
+            "mac": []
+          },
+          {
+            "name": "Loopback Pseudo-Interface 1",
+            "is_up": true,
+            "speed_mbps": 1073,
+            "mtu": 1500,
+            "ipv4": [
+              {
+                "address": "127.0.0.1",
+                "netmask": "255.0.0.0",
+                "broadcast": null
+              }
+            ],
+            "ipv6": [
+              {
+                "address": "::1",
+                "netmask": null,
+                "broadcast": null
+              }
+            ],
+            "mac": []
+          }
+        ],
+        "global_ipv6": [],
+        "apipa": [],
+        "low_mtu": [],
+        "highlights": [
+          "以太网 [down] IPv4=169.254.83.172 IPv6=fe80::447d:3531:b53b:295b",
+          "WLAN 2 [up] IPv4=192.168.1.167 IPv6=fe80::77d0:b321:1c8f:2111",
+          "WLAN [down] IPv4=169.254.30.59 IPv6=fe80::48b6:7d3e:fc3a:9971",
+          "蓝牙网络连接 [down] IPv4=169.254.252.197 IPv6=fe80::15cc:541b:a16e:ec73",
+          "Loopback Pseudo-Interface 1 [up] IPv4=127.0.0.1 IPv6=::1"
+        ]
+      },
+      "recommendations": []
+    },
+    {
+      "name": "Default route",
+      "status": "OK",
+      "summary": "IPv4 default=1, IPv6 default=0.",
+      "details": {
+        "routes": {
+          "ipv4_default": [
+            {
+              "InterfaceAlias": "WLAN 2",
+              "NextHop": "192.168.1.1",
+              "RouteMetric": 0,
+              "InterfaceMetric": 45
+            }
+          ],
+          "ipv6_default": [],
+          "raw": [
+            {
+              "command": [
+                "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.EXE",
+                "-NoProfile",
+                "-Command",
+                "Get-NetRoute -DestinationPrefix '0.0.0.0/0' | Select-Object InterfaceAlias,NextHop,RouteMetric,InterfaceMetric | ConvertTo-Json -Compress"
+              ],
+              "returncode": 0,
+              "stdout": "{\"InterfaceAlias\":\"WLAN 2\",\"NextHop\":\"192.168.1.1\",\"RouteMetric\":0,\"InterfaceMetric\":45}",
+              "stderr": "",
+              "duration_ms": 609
+            },
+            {
+              "command": [
+                "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.EXE",
+                "-NoProfile",
+                "-Command",
+                "Get-NetRoute -DestinationPrefix '::/0' | Select-Object InterfaceAlias,NextHop,RouteMetric,InterfaceMetric | ConvertTo-Json -Compress"
+              ],
+              "returncode": 1,
+              "stdout": "",
+              "stderr": "Get-NetRoute : 找不到任何“DestinationPrefix”属性等于“::/0”的 MSFT_NetRoute 对象。请验证属性值，然后重试。\nAt line:1 char:1\n+ Get-NetRoute -DestinationPrefix '::/0' | Select-Object InterfaceAlias ...\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : ObjectNotFound: (::/0:String) [Get-NetRoute], CimJobException\n    + FullyQualifiedErrorId : CmdletizationQuery_NotFound_DestinationPrefix,Get-NetRoute",
+              "duration_ms": 578
+            }
+          ]
+        },
+        "highlights": [
+          "IPv4 default routes: 1",
+          "IPv6 default routes: 0"
+        ]
+      },
+      "recommendations": []
+    },
+    {
+      "name": "Connectivity",
+      "status": "WARN",
+      "summary": "IPv4 outbound=ok, IPv6 outbound=failed, DNS resolve=ok.",
+      "details": {
+        "tcp": [
+          {
+            "host": "1.1.1.1",
+            "port": 443,
+            "family": "IPv4",
+            "ok": false,
+            "error": "timed out",
+            "duration_ms": 2000,
+            "label": "Cloudflare HTTPS"
+          },
+          {
+            "host": "8.8.8.8",
+            "port": 53,
+            "family": "IPv4",
+            "ok": true,
+            "remote": "8.8.8.8",
+            "local": "192.168.1.167",
+            "duration_ms": 171,
+            "label": "Google DNS TCP"
+          },
+          {
+            "host": "223.5.5.5",
+            "port": 443,
+            "family": "IPv4",
+            "ok": true,
+            "remote": "223.5.5.5",
+            "local": "192.168.1.167",
+            "duration_ms": 15,
+            "label": "AliDNS HTTPS"
+          },
+          {
+            "host": "2606:4700:4700::1111",
+            "port": 443,
+            "family": "IPv6",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0,
+            "label": "Cloudflare IPv6 HTTPS"
+          },
+          {
+            "host": "2001:4860:4860::8888",
+            "port": 53,
+            "family": "IPv6",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0,
+            "label": "Google IPv6 DNS TCP"
+          },
+          {
+            "host": "2400:3200::1",
+            "port": 443,
+            "family": "IPv6",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0,
+            "label": "AliDNS IPv6 HTTPS"
+          }
+        ],
+        "resolve": [
+          {
+            "host": "example.com",
+            "family": "IPv4",
+            "ok": true,
+            "addresses": [
+              "104.20.23.154",
+              "172.66.147.243"
+            ],
+            "duration_ms": 0
+          },
+          {
+            "host": "example.com",
+            "family": "IPv6",
+            "ok": false,
+            "error": "[Errno 11004] getaddrinfo failed",
+            "duration_ms": 0
+          },
+          {
+            "host": "cloudflare.com",
+            "family": "IPv4",
+            "ok": true,
+            "addresses": [
+              "104.16.132.229",
+              "104.16.133.229"
+            ],
+            "duration_ms": 14
+          },
+          {
+            "host": "cloudflare.com",
+            "family": "IPv6",
+            "ok": false,
+            "error": "[Errno 11004] getaddrinfo failed",
+            "duration_ms": 0
+          }
+        ],
+        "highlights": [
+          "IPv4 Cloudflare HTTPS 1.1.1.1:443 fail (timed out)",
+          "IPv4 Google DNS TCP 8.8.8.8:53 ok",
+          "IPv4 AliDNS HTTPS 223.5.5.5:443 ok",
+          "IPv6 Cloudflare IPv6 HTTPS 2606:4700:4700::1111:443 fail ([WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。)",
+          "IPv6 Google IPv6 DNS TCP 2001:4860:4860::8888:53 fail ([WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。)",
+          "IPv6 AliDNS IPv6 HTTPS 2400:3200::1:443 fail ([WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。)",
+          "DNS IPv4 example.com: 104.20.23.154, 172.66.147.243",
+          "DNS IPv6 example.com: [Errno 11004] getaddrinfo failed",
+          "DNS IPv4 cloudflare.com: 104.16.132.229, 104.16.133.229",
+          "DNS IPv6 cloudflare.com: [Errno 11004] getaddrinfo failed"
+        ]
+      },
+      "recommendations": [
+        "IPv6 outbound connectivity failed or is not provisioned."
+      ]
+    },
+    {
+      "name": "DNS",
+      "status": "OK",
+      "summary": "System DNS servers=5, direct DNS successes=8/16.",
+      "details": {
+        "system_dns": {
+          "servers": [
+            "202.96.134.33",
+            "202.96.128.86",
+            "fec0:0:0:ffff::1",
+            "fec0:0:0:ffff::2",
+            "fec0:0:0:ffff::3"
+          ],
+          "raw": [
+            {
+              "command": [
+                "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.EXE",
+                "-NoProfile",
+                "-Command",
+                "Get-DnsClientServerAddress | Select-Object InterfaceAlias,AddressFamily,ServerAddresses | ConvertTo-Json -Compress"
+              ],
+              "returncode": 0,
+              "stdout": "[{\"InterfaceAlias\":\"以太网\",\"AddressFamily\":2,\"ServerAddresses\":[\"202.96.134.33\",\"202.96.128.86\"]},{\"InterfaceAlias\":\"以太网\",\"AddressFamily\":23,\"ServerAddresses\":[]},{\"InterfaceAlias\":\"WLAN 2\",\"AddressFamily\":2,\"ServerAddresses\":[\"202.96.134.33\",\"202.96.128.86\"]},{\"InterfaceAlias\":\"WLAN 2\",\"AddressFamily\":23,\"ServerAddresses\":[]},{\"InterfaceAlias\":\"WLAN\",\"AddressFamily\":2,\"ServerAddresses\":[]},{\"InterfaceAlias\":\"WLAN\",\"AddressFamily\":23,\"ServerAddresses\":[\"fec0:0:0:ffff::1\",\"fec0:0:0:ffff::2\",\"fec0:0:0:ffff::3\"]},{\"InterfaceAlias\":\"蓝牙网络连接\",\"AddressFamily\":2,\"ServerAddresses\":[]},{\"InterfaceAlias\":\"蓝牙网络连接\",\"AddressFamily\":23,\"ServerAddresses\":[\"fec0:0:0:ffff::1\",\"fec0:0:0:ffff::2\",\"fec0:0:0:ffff::3\"]},{\"InterfaceAlias\":\"Loopback Pseudo-Interface 1\",\"AddressFamily\":2,\"ServerAddresses\":[]},{\"InterfaceAlias\":\"Loopback Pseudo-Interface 1\",\"AddressFamily\":23,\"ServerAddresses\":[\"fec0:0:0:ffff::1\",\"fec0:0:0:ffff::2\",\"fec0:0:0:ffff::3\"]}]",
+              "stderr": "",
+              "duration_ms": 375
+            }
+          ]
+        },
+        "direct": [
+          {
+            "server": "1.1.1.1",
+            "name": "example.com",
+            "qtype": "A",
+            "ok": true,
+            "peer": "1.1.1.1",
+            "duration_ms": 63,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "example.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 72,
+                "data": "172.66.147.243"
+              },
+              {
+                "name": "example.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 72,
+                "data": "104.20.23.154"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "1.1.1.1",
+            "name": "example.com",
+            "qtype": "AAAA",
+            "ok": true,
+            "peer": "1.1.1.1",
+            "duration_ms": 46,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "example.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 93,
+                "data": "2606:4700:10::ac42:93f3"
+              },
+              {
+                "name": "example.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 93,
+                "data": "2606:4700:10::6814:179a"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "1.1.1.1",
+            "name": "cloudflare.com",
+            "qtype": "A",
+            "ok": true,
+            "peer": "1.1.1.1",
+            "duration_ms": 78,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "cloudflare.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 215,
+                "data": "104.16.132.229"
+              },
+              {
+                "name": "cloudflare.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 215,
+                "data": "104.16.133.229"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "1.1.1.1",
+            "name": "cloudflare.com",
+            "qtype": "AAAA",
+            "ok": true,
+            "peer": "1.1.1.1",
+            "duration_ms": 46,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "cloudflare.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 193,
+                "data": "2606:4700::6810:85e5"
+              },
+              {
+                "name": "cloudflare.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 193,
+                "data": "2606:4700::6810:84e5"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "1.0.0.1",
+            "name": "example.com",
+            "qtype": "A",
+            "ok": true,
+            "peer": "1.0.0.1",
+            "duration_ms": 62,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "example.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 73,
+                "data": "104.20.23.154"
+              },
+              {
+                "name": "example.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 73,
+                "data": "172.66.147.243"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "1.0.0.1",
+            "name": "example.com",
+            "qtype": "AAAA",
+            "ok": true,
+            "peer": "1.0.0.1",
+            "duration_ms": 62,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "example.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 300,
+                "data": "2606:4700:10::6814:179a"
+              },
+              {
+                "name": "example.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 300,
+                "data": "2606:4700:10::ac42:93f3"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "1.0.0.1",
+            "name": "cloudflare.com",
+            "qtype": "A",
+            "ok": true,
+            "peer": "1.0.0.1",
+            "duration_ms": 47,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "cloudflare.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 87,
+                "data": "104.16.133.229"
+              },
+              {
+                "name": "cloudflare.com",
+                "type": 1,
+                "class": 1,
+                "ttl": 87,
+                "data": "104.16.132.229"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "1.0.0.1",
+            "name": "cloudflare.com",
+            "qtype": "AAAA",
+            "ok": true,
+            "peer": "1.0.0.1",
+            "duration_ms": 61,
+            "rcode": 0,
+            "answers": [
+              {
+                "name": "cloudflare.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 243,
+                "data": "2606:4700::6810:84e5"
+              },
+              {
+                "name": "cloudflare.com",
+                "type": 28,
+                "class": 1,
+                "ttl": 243,
+                "data": "2606:4700::6810:85e5"
+              }
+            ],
+            "answer_count": 2
+          },
+          {
+            "server": "2606:4700:4700::1111",
+            "name": "example.com",
+            "qtype": "A",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          },
+          {
+            "server": "2606:4700:4700::1111",
+            "name": "example.com",
+            "qtype": "AAAA",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          },
+          {
+            "server": "2606:4700:4700::1111",
+            "name": "cloudflare.com",
+            "qtype": "A",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          },
+          {
+            "server": "2606:4700:4700::1111",
+            "name": "cloudflare.com",
+            "qtype": "AAAA",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          },
+          {
+            "server": "2606:4700:4700::1001",
+            "name": "example.com",
+            "qtype": "A",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          },
+          {
+            "server": "2606:4700:4700::1001",
+            "name": "example.com",
+            "qtype": "AAAA",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          },
+          {
+            "server": "2606:4700:4700::1001",
+            "name": "cloudflare.com",
+            "qtype": "A",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          },
+          {
+            "server": "2606:4700:4700::1001",
+            "name": "cloudflare.com",
+            "qtype": "AAAA",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0
+          }
+        ],
+        "highlights": [
+          "System DNS: 202.96.134.33, 202.96.128.86, fec0:0:0:ffff::1, fec0:0:0:ffff::2, fec0:0:0:ffff::3",
+          "1.1.1.1 A example.com: 172.66.147.243, 104.20.23.154",
+          "1.1.1.1 AAAA example.com: 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a",
+          "1.1.1.1 A cloudflare.com: 104.16.132.229, 104.16.133.229",
+          "1.1.1.1 AAAA cloudflare.com: 2606:4700::6810:85e5, 2606:4700::6810:84e5",
+          "1.0.0.1 A example.com: 104.20.23.154, 172.66.147.243",
+          "1.0.0.1 AAAA example.com: 2606:4700:10::6814:179a, 2606:4700:10::ac42:93f3",
+          "1.0.0.1 A cloudflare.com: 104.16.133.229, 104.16.132.229",
+          "1.0.0.1 AAAA cloudflare.com: 2606:4700::6810:84e5, 2606:4700::6810:85e5",
+          "2606:4700:4700::1111 A example.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "2606:4700:4700::1111 AAAA example.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "2606:4700:4700::1111 A cloudflare.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "2606:4700:4700::1111 AAAA cloudflare.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "2606:4700:4700::1001 A example.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "2606:4700:4700::1001 AAAA example.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "2606:4700:4700::1001 A cloudflare.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "2606:4700:4700::1001 AAAA cloudflare.com: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。"
+        ]
+      },
+      "recommendations": []
+    },
+    {
+      "name": "IPv4 NAT",
+      "status": "OK",
+      "summary": "Endpoint-independent IPv4 NAT mapping (cone-like; filtering not classified)",
+      "details": {
+        "local": {
+          "address": "0.0.0.0",
+          "port": 57947
+        },
+        "servers": [
+          {
+            "server": "74.125.250.129:19302",
+            "ok": true,
+            "peer": "74.125.250.129:19302",
+            "mapped": {
+              "address": "183.27.96.89",
+              "port": 32741
+            },
+            "duration_ms": 155,
+            "host": "stun.l.google.com"
+          },
+          {
+            "server": "74.125.250.129:19302",
+            "ok": true,
+            "peer": "74.125.250.129:19302",
+            "mapped": {
+              "address": "183.27.96.89",
+              "port": 32741
+            },
+            "duration_ms": 172,
+            "host": "stun1.l.google.com"
+          },
+          {
+            "server": "162.159.207.0:3478",
+            "ok": true,
+            "peer": "162.159.207.0:3478",
+            "mapped": {
+              "address": "183.27.96.89",
+              "port": 32741
+            },
+            "duration_ms": 171,
+            "host": "stun.cloudflare.com"
+          }
+        ],
+        "unique_mappings": [
+          "183.27.96.89:32741"
+        ],
+        "nat_type": "Endpoint-independent IPv4 NAT mapping (cone-like; filtering not classified)",
+        "highlights": [
+          "Local UDP socket: 0.0.0.0:57947",
+          "NAT result: Endpoint-independent IPv4 NAT mapping (cone-like; filtering not classified)",
+          "stun.l.google.com: 183.27.96.89:32741",
+          "stun1.l.google.com: 183.27.96.89:32741",
+          "stun.cloudflare.com: 183.27.96.89:32741"
+        ]
+      },
+      "recommendations": [
+        "This test classifies mapping behavior. Full-cone vs restricted-cone filtering needs a cooperative STUN server and is reported conservatively."
+      ]
+    },
+    {
+      "name": "IPv6 stack",
+      "status": "WARN",
+      "summary": "Outbound=failed, inbound=not verified/failed.",
+      "details": {
+        "global_addresses": [],
+        "outbound": [
+          {
+            "host": "2606:4700:4700::1111",
+            "port": 443,
+            "family": "IPv6",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0,
+            "label": "Cloudflare IPv6 HTTPS"
+          },
+          {
+            "host": "2001:4860:4860::8888",
+            "port": 53,
+            "family": "IPv6",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0,
+            "label": "Google IPv6 DNS TCP"
+          },
+          {
+            "host": "2400:3200::1",
+            "port": 443,
+            "family": "IPv6",
+            "ok": false,
+            "error": "[WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+            "duration_ms": 0,
+            "label": "AliDNS IPv6 HTTPS"
+          }
+        ],
+        "inbound": {
+          "mode": "local-listen-only",
+          "ok": false
+        },
+        "highlights": [
+          "Global IPv6 addresses: -",
+          "IPv6 outbound Cloudflare IPv6 HTTPS: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "IPv6 outbound Google IPv6 DNS TCP: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。",
+          "IPv6 outbound AliDNS IPv6 HTTPS: [WinError 10051] 向一个无法连接的网络尝试了一个套接字操作。"
+        ],
+        "external_probe_source": "https://check-host.net/about/api?lang=en"
+      },
+      "recommendations": [
+        "No global IPv6 address was detected; inbound IPv6 cannot work without one.",
+        "IPv6 outbound failed. Verify router advertisement, DHCPv6/prefix delegation, firewall, and DNS AAAA reachability."
+      ]
+    },
+    {
+      "name": "Packet-level LAN checks",
+      "status": "SKIP",
+      "summary": "DHCP and LAN loop packet checks were skipped by --skip-packet.",
+      "details": {},
+      "recommendations": []
+    },
+    {
+      "name": "LAN health summary",
+      "status": "OK",
+      "summary": "No obvious LAN-side issue was detected.",
+      "details": {
+        "issues": [],
+        "highlights": []
+      },
+      "recommendations": []
+    }
+  ],
+  "finished_at": "2026-06-09T18:10:13+08:00",
+  "finished_at_utc": "2026-06-09T10:10:13+00:00",
+  "summary": {
+    "status": "WARN",
+    "counts": {
+      "OK": 5,
+      "WARN": 2,
+      "SKIP": 1
+    }
+  }
+}
