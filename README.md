@@ -5,6 +5,7 @@ Windows/Linux 网络检测与保守修复工具。
 ## 当前交付
 
 - Windows GUI：Electron 中文桌面版 `outputs/NetFixInspector-Electron/NetFixInspector.exe`
+- Windows GUI 完整运行包：`outputs/NetFixInspector-Electron-With-FFmpeg.zip`，包含 Electron 运行库和 `ffmpeg.dll`
 - Windows：原生 C++ 控制台程序 `outputs/NetFixInspector.exe`
 - Windows 一键脚本：`outputs/*.bat`
 - Linux：`outputs/netfix_tool/netfix-linux.sh + netfix.py`
@@ -42,6 +43,10 @@ cd outputs/netfix_tool
 chmod +x ./netfix-linux.sh
 ./netfix-linux.sh scan --output report.json
 ```
+
+## Windows GUI 打包说明
+
+Electron 桌面版依赖同目录运行库，请使用完整目录 `outputs/NetFixInspector-Electron\`，或下载 Release 中的 `NetFixInspector-Electron-With-FFmpeg.zip`。该压缩包已包含 `ffmpeg.dll`、Chromium/Electron 运行库、C++ 后端和 Npcap 安装入口。
 
 ## Npcap
 

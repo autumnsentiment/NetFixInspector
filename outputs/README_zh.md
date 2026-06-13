@@ -52,6 +52,8 @@ NetFixInspector 是一个 Windows/Linux 网络检测与保守修复工具。Wind
 
 Electron 桌面版仅负责中文界面、参数选择、报告展示和打开报告文件；实际检测仍由内置的 C++ 后端执行。打包目录为 `NetFixInspector-Electron\`，其中 `resources\backend\NetFixInspector.exe` 是后端程序。
 
+请使用完整目录 `NetFixInspector-Electron\` 运行桌面版，或下载 `NetFixInspector-Electron-With-FFmpeg.zip`。该压缩包包含 `ffmpeg.dll`、Chromium/Electron 运行库、C++ 后端和 Npcap 安装入口；不要只拷贝单个 `NetFixInspector.exe` 到其他目录运行。
+
 如果看到 `Npcap is not installed or cannot be loaded.`，说明当前系统没有安装 Npcap，或 Npcap 运行库无法被加载。Electron 桌面版左侧和底部均提供“安装/修复 Npcap”入口；该入口会以管理员权限运行 `Install-Npcap.ps1`。如果包内存在 `resources\support\third_party\npcap\npcap*.exe`，会优先安装内置的授权 Npcap 安装器；否则会打开 Npcap 官方下载页。
 
 如需构建一个真正内置 Npcap 的 Electron 包，请先把你的 Npcap OEM 授权安装器放到源码目录：

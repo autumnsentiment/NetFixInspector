@@ -91,4 +91,13 @@ try {
 }
 Copy-Item -Force .\README_zh.md (Join-Path $resolvedOut "README_zh.md")
 Copy-Item -Force .\LICENSE (Join-Path $resolvedOut "LICENSE")
+
+$portableCandidates = @(Get-ChildItem -LiteralPath (Join-Path $ScriptDir "dist") -Filter "*.exe" -File -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -like "*Portable*.exe" -or $_.Name -like "*NetFixInspector*.exe" } |
+    Sort-Object LastWriteTime -Descending)
+if ($portableCandidates.Count -gt 0) {
+    $portableOut = Join-Path (Split-Path -Parent $resolvedOut) "NetFixInspector-Electron-Portable.exe"
+    Copy-Item -Force $portableCandidates[0].FullName $portableOut
+    Write-Host "Electron portable exe: $portableOut"
+}
 Write-Host "Electron output: $resolvedOut"

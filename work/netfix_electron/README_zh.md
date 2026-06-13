@@ -23,6 +23,8 @@ powershell -ExecutionPolicy Bypass -File .\build_electron.ps1
 outputs\NetFixInspector-Electron\
 ```
 
+Release 额外提供 `NetFixInspector-Electron-With-FFmpeg.zip`，包含完整 Electron 运行目录、`ffmpeg.dll`、C++ 后端和支持脚本。桌面版不要只拷贝单个 `NetFixInspector.exe` 到其他目录运行。
+
 ## 后端
 
 构建脚本会把 `outputs\NetFixInspector.exe` 复制到 `backend\NetFixInspector.exe`，Electron 打包后会从 `resources\backend\NetFixInspector.exe` 加载它。
