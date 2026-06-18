@@ -73,10 +73,6 @@ function readOptions(base) {
   };
 }
 
-function portOptions() {
-  return readOptions({ command: 'port' });
-}
-
 function setRunning(running, text) {
   el('runState').textContent = text;
   document.querySelectorAll('.action, .secondary').forEach((button) => {
@@ -113,15 +109,17 @@ function renderActions() {
 
 function selectAction(action) {
   selectedAction = action;
+  const isPortPing = action.options?.command === 'port';
   document.querySelectorAll('.action').forEach((button) => {
     button.classList.toggle('selected', button.dataset.actionId === action.id);
   });
+  el('portPingGroup').hidden = !isPortPing;
   el('selectedActionTitle').textContent = action.title;
   el('selectedActionDesc').textContent = action.desc;
   el('startSelectedBtn').textContent = action.danger ? `开始：${action.title}` : `开始 ${action.title}`;
   el('startSelectedBtn').disabled = false;
   el('runState').textContent = `已选择：${action.title}`;
-  if (action.options?.command === 'port') focusPortPing(false);
+  if (isPortPing) focusPortPing(false);
 }
 
 async function runAction(action) {
@@ -168,6 +166,7 @@ function validatePortPing() {
 
 function focusPortPing(markStatus = true) {
   const group = el('portPingGroup');
+  group.hidden = false;
   group.classList.add('attention');
   group.scrollIntoView({ behavior: 'smooth', block: 'center' });
   el('portHost').focus();

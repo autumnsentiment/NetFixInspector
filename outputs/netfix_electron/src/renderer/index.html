@@ -52,31 +52,6 @@
           <span>网卡名称</span>
           <input id="interfaceName" type="text" placeholder="可选，例如 WLAN 或 以太网">
         </label>
-        <div class="option-group" id="portPingGroup">
-          <h3>端口 Ping</h3>
-          <label>
-            <span>目标主机</span>
-            <input id="portHost" type="text" placeholder="输入域名、IPv4 或 IPv6">
-          </label>
-          <div class="option-row">
-            <label>
-              <span>端口</span>
-              <input id="portNumber" type="number" min="1" max="65535" value="443">
-            </label>
-            <label>
-              <span>次数</span>
-              <input id="portCount" type="number" min="1" max="20" value="3">
-            </label>
-          </div>
-          <label>
-            <span>地址族</span>
-            <select id="portFamily">
-              <option value="both">IPv4 + IPv6</option>
-              <option value="ipv4">仅 IPv4</option>
-              <option value="ipv6">仅 IPv6</option>
-            </select>
-          </label>
-        </div>
         <label class="check">
           <input id="skipPacket" type="checkbox" checked>
           <span>快速扫描跳过抓包</span>
@@ -104,6 +79,36 @@
           <span>已选择功能</span>
           <h3 id="selectedActionTitle">未选择</h3>
           <p id="selectedActionDesc">从左侧选择功能后再开始运行。</p>
+          <div class="action-config" id="portPingGroup" hidden>
+            <div class="config-head">
+              <div>
+                <span>端口 Ping 参数</span>
+                <h3>目标与端口</h3>
+              </div>
+            </div>
+            <div class="port-form">
+              <label class="field host-field">
+                <span>目标主机</span>
+                <input id="portHost" type="text" placeholder="输入域名、IPv4 或 IPv6">
+              </label>
+              <label class="field">
+                <span>端口</span>
+                <input id="portNumber" type="number" min="1" max="65535" value="443">
+              </label>
+              <label class="field">
+                <span>次数</span>
+                <input id="portCount" type="number" min="1" max="20" value="3">
+              </label>
+              <label class="field">
+                <span>地址族</span>
+                <select id="portFamily">
+                  <option value="both">IPv4 + IPv6</option>
+                  <option value="ipv4">仅 IPv4</option>
+                  <option value="ipv6">仅 IPv6</option>
+                </select>
+              </label>
+            </div>
+          </div>
         </div>
         <button class="secondary primary" id="startSelectedBtn" disabled>开始</button>
       </section>
