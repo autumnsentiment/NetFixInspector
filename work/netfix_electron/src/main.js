@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
+﻿const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -7,6 +7,7 @@ const { spawn, spawnSync } = require('child_process');
 const COMMANDS = new Set(['scan', 'connectivity', 'dns', 'nat', 'ipv6', 'dhcp', 'loop', 'repair', 'npcap', 'port', 'portping']);
 const DNS_PROVIDERS = new Set(['cloudflare', 'alidns', 'google', 'tencent', 'quad9']);
 const PORT_FAMILIES = new Set(['both', 'ipv4', 'ipv6']);
+const PORT_PROTOCOLS = new Set(['tcp', 'udp']);
 
 function logMainError(error, context = 'main') {
   try {
@@ -131,6 +132,7 @@ function sanitizeOptions(options = {}) {
   const provider = String(options.provider || 'cloudflare').toLowerCase();
   const dnsProvider = DNS_PROVIDERS.has(provider) ? provider : 'cloudflare';
   const family = String(options.portFamily || 'both').toLowerCase();
+  const protocol = String(options.portProtocol || 'tcp').toLowerCase();
   const iface = String(options.interfaceName || '').trim();
   return {
     command: command === 'portping' ? 'port' : command,
@@ -141,6 +143,7 @@ function sanitizeOptions(options = {}) {
     portCount,
     portHost: String(options.portHost || 'example.com').trim() || 'example.com',
     portFamily: PORT_FAMILIES.has(family) ? family : 'both',
+    portProtocol: PORT_PROTOCOLS.has(protocol) ? protocol : 'tcp',
     provider: dnsProvider,
     interfaceName: iface,
     skipPacket: options.skipPacket !== false,
@@ -174,7 +177,7 @@ function buildArgs(opts, outputPath) {
     args.push('--seconds', String(opts.seconds), '--probes', String(opts.probes));
   }
   if (opts.command === 'port') {
-    args.push('--host', opts.portHost, '--port', String(opts.port), '--family', opts.portFamily, '--count', String(opts.portCount));
+    args.push('--host', opts.portHost, '--port', String(opts.port), '--family', opts.portFamily, '--count', String(opts.portCount), '--protocol', opts.portProtocol);
   }
   if (opts.command === 'repair') {
     if (opts.flushDns) args.push('--flush-dns');

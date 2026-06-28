@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 #include <vector>
@@ -25,6 +25,7 @@ struct Options {
     int inbound_port = 0;
     int port_number = 443;
     int port_count = 3;
+    std::string port_protocol = "tcp";
     double broadcast_threshold = 60.0;
     std::string output_path;
     std::string interface_name;

@@ -1,4 +1,4 @@
-const actions = [
+﻿const actions = [
   { id: 'quick', title: '快速检测', desc: '基础网络、DNS、NAT、IPv6 摘要', options: { command: 'scan', quick: true } },
   { id: 'full', title: '完整检测', desc: '包含 DHCP 和内网回路检测', options: { command: 'scan', skipPacket: false } },
   { id: 'dns', title: 'DNS 检测', desc: '读取系统 DNS 并直连公共 DNS 查询', options: { command: 'dns' } },
@@ -66,6 +66,7 @@ function readOptions(base) {
     port: Number(el('portNumber').value || 443),
     portCount: Number(el('portCount').value || 3),
     portFamily: el('portFamily').value,
+    portProtocol: el('portProtocol').value,
     provider: el('provider').value,
     interfaceName: el('interfaceName').value,
     skipPacket: base.skipPacket ?? el('skipPacket').checked,

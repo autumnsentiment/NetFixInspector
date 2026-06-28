@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: light;
   --bg: #f4f7fb;
   --panel: #ffffff;
@@ -256,7 +256,7 @@ h1, h2, h3, p { margin: 0; }
 
 .port-form {
   display: grid;
-  grid-template-columns: minmax(220px, 2fr) minmax(100px, 120px) minmax(100px, 120px) minmax(140px, 160px);
+  grid-template-columns: minmax(220px, 2fr) minmax(80px, 100px) minmax(100px, 120px) minmax(100px, 120px) minmax(140px, 160px);
   gap: 10px;
   align-items: end;
   margin-top: 12px;

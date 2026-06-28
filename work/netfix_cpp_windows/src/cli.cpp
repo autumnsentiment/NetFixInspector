@@ -1,4 +1,4 @@
-#include "cli.h"
+﻿#include "cli.h"
 
 #include <iostream>
 #include <set>
@@ -23,7 +23,8 @@ bool needs_value(const std::string& arg) {
         "--inbound-address", "--inbound-port", "--inbound-seconds",
         "--check-host-nodes", "--dhcp-seconds", "--seconds", "--discover-count",
         "--loop-seconds", "--loop-probes", "--probes", "--broadcast-threshold",
-        "--set-dns", "--custom-dns", "--host", "--port", "--target", "--family", "--count",
+        "--family", "--count", "--protocol",
+        "--set-dns", "--custom-dns", "--host", "--port", "--target",
     };
     return value_args.count(arg) > 0;
 }
@@ -110,6 +111,7 @@ ParseResult parse_args(int argc, wchar_t** argv) {
             else if (arg == "--target") result.options.port_targets.push_back(value);
             else if (arg == "--family") result.options.port_family = to_lower(value);
             else if (arg == "--count") result.options.port_count = parse_int(value, arg);
+            else if (arg == "--protocol") result.options.port_protocol = to_lower(value);
             else {
                 throw std::runtime_error("Unknown argument: " + arg);
             }
@@ -127,6 +129,9 @@ ParseResult parse_args(int argc, wchar_t** argv) {
             result.options.port_family != "ipv6" && result.options.port_family != "4" &&
             result.options.port_family != "6") {
             throw std::runtime_error("Invalid family: " + result.options.port_family + " (expected both, ipv4, or ipv6)");
+        }
+        if (result.options.port_protocol != "tcp" && result.options.port_protocol != "udp") {
+            throw std::runtime_error("Invalid protocol: " + result.options.port_protocol + " (expected tcp or udp)");
         }
     } catch (const std::exception& ex) {
         result.error = true;
@@ -150,7 +155,7 @@ void print_help() {
         << "  loop            Probe and capture LAN loop or broadcast-storm hints.\n"
         << "  repair          Prepare or apply conservative repair commands.\n\n"
         << "  npcap           Check whether the Npcap runtime can be loaded.\n\n"
-        << "  port            TCP port ping over IPv4 and/or IPv6.\n\n"
+        << "  port            TCP/UDP port ping over IPv4 and/or IPv6.\n\n"
         << "Common options:\n"
         << "  --json                  Print JSON instead of text summary.\n"
         << "  --output PATH           Write full JSON report to PATH.\n"
@@ -166,9 +171,9 @@ void print_help() {
         << "  --probes N              Active L2 probe count for loop detection.\n"
         << "  --broadcast-threshold N Warn when broadcast/multicast rate exceeds N/s.\n\n"
         << "Port ping options:\n"
-        << "  --host HOST             Hostname or IP to test, default example.com.\n"
-        << "  --port N                TCP port to test, default 443.\n"
-        << "  --target HOST:PORT      Add target; IPv6 can use [2001:db8::1]:443.\n"
+        << "  --protocol tcp|udp      Transport protocol, default tcp.\\n"
+        << "  --host HOST             Hostname or IP to test, default example.com.\\n"
+        << "  --port N                Port to test, default 443.\\n"
         << "  --family both|ipv4|ipv6 Address family to test, default both.\n"
         << "  --count N               Probe attempts per family/target, default 3.\n\n"
         << "Repair options:\n"

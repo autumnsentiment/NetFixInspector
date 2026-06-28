@@ -1,4 +1,4 @@
-#include "probe.h"
+﻿#include "probe.h"
 
 #include <array>
 #include <algorithm>
@@ -40,6 +40,8 @@ struct PortStats {
     int port = 0;
     int attempts = 0;
     int successes = 0;
+    int timeouts = 0;
+    int icmp_unreachables = 0;
     uint64_t total_ms = 0;
     std::string last_error;
     std::vector<std::string> remotes;
@@ -185,6 +187,72 @@ TcpResult tcp_probe(const Endpoint& ep, int family, double timeout_seconds) {
     }
     freeaddrinfo(infos);
     result.duration_ms = elapsed_ms(start);
+    return result;
+}
+
+TcpResult udp_probe(const Endpoint& ep, int family, double timeout_seconds) {
+    auto start = std::chrono::steady_clock::now();
+    TcpResult result;
+    result.family = family == AF_INET6 ? "IPv6" : "IPv4";
+    result.host = ep.host;
+    result.port = ep.port;
+    result.label = ep.label;
+    addrinfo hints{};
+    hints.ai_family = family;
+    hints.ai_socktype = SOCK_DGRAM;
+    hints.ai_protocol = IPPROTO_UDP;
+    addrinfo* infos = nullptr;
+    std::string port = std::to_string(ep.port);
+    int gai = getaddrinfo(ep.host.c_str(), port.c_str(), &hints, &infos);
+    if (gai != 0) {
+        result.error = "getaddrinfo failed: " + std::to_string(gai);
+        result.duration_ms = elapsed_ms(start);
+        return result;
+    }
+    for (addrinfo* ai = infos; ai; ai = ai->ai_next) {
+        SOCKET s = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
+        if (s == INVALID_SOCKET) continue;
+        DWORD timeout_ms = static_cast<DWORD>(timeout_seconds * 1000);
+        setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char*>(&timeout_ms), sizeof(timeout_ms));
+        const char payload[] = "\x00";
+        int sent = sendto(s, payload, 1, 0, ai->ai_addr, static_cast<int>(ai->ai_addrlen));
+        if (sent == SOCKET_ERROR) {
+            result.error = "sendto failed: " + socket_error_text();
+            closesocket(s);
+            continue;
+        }
+        fd_set read_set;
+        FD_ZERO(&read_set);
+        FD_SET(s, &read_set);
+        timeval tv{};
+        tv.tv_sec = static_cast<long>(timeout_seconds);
+        tv.tv_usec = static_cast<long>((timeout_seconds - tv.tv_sec) * 1000000);
+        int rc = select(0, &read_set, nullptr, nullptr, &tv);
+        if (rc > 0 && FD_ISSET(s, &read_set)) {
+            char buf[256];
+            int received = recvfrom(s, buf, sizeof(buf), 0, nullptr, nullptr);
+            if (received >= 0) {
+                result.ok = true;
+                result.remote = ep.host + ":" + std::to_string(ep.port);
+            } else {
+                int err = WSAGetLastError();
+                if (err == WSAECONNRESET) {
+                    result.error = "ICMP port unreachable";
+                } else {
+                    result.error = socket_error_text(err);
+                }
+            }
+        } else if (rc == 0) {
+            result.error = "timeout (open/filtered/silent)";
+        } else {
+            result.error = "select failed: " + socket_error_text();
+        }
+        closesocket(s);
+        result.duration_ms = elapsed_ms(start);
+        if (result.ok) break;
+    }
+    freeaddrinfo(infos);
+    if (result.duration_ms == 0) result.duration_ms = elapsed_ms(start);
     return result;
 }
 
@@ -462,6 +530,7 @@ void port_ping_check(Report& report, const Options& options) {
 
     Check check;
     check.name = "Port ping";
+    check.details["protocol"] = options.port_protocol;
     check.details["family"] = options.port_family;
     check.details["count"] = std::to_string(options.port_count);
     check.details["timeout_seconds"] = std::to_string(options.timeout_seconds);
@@ -499,6 +568,8 @@ void port_ping_check(Report& report, const Options& options) {
                 it->remotes.push_back(result.remote);
             }
         } else {
+            if (result.error == "ICMP port unreachable") ++it->icmp_unreachables;
+            else if (result.error.find("timeout") != std::string::npos) ++it->timeouts;
             it->last_error = result.error;
         }
         attempt_highlights.push_back(result.family + " " + result.host + ":" + std::to_string(result.port) +
@@ -510,11 +581,12 @@ void port_ping_check(Report& report, const Options& options) {
 
     for (const auto& target : targets) {
         for (int i = 0; i < options.port_count; ++i) {
+            auto probe_fn = (options.port_protocol == "udp") ? udp_probe : tcp_probe;
             if (wants_ipv4(options)) {
-                record(tcp_probe(target, AF_INET, options.timeout_seconds));
+                record(probe_fn(target, AF_INET, options.timeout_seconds));
             }
             if (wants_ipv6(options)) {
-                record(tcp_probe(target, AF_INET6, options.timeout_seconds));
+                record(probe_fn(target, AF_INET6, options.timeout_seconds));
             }
         }
     }
@@ -541,19 +613,35 @@ void port_ping_check(Report& report, const Options& options) {
 
     if (total_attempts == 0) {
         check.status = Status::FAIL;
-        check.summary = "No TCP port probe was executed.";
+        check.summary = std::string(options.port_protocol == "udp" ? "No UDP" : "No TCP") + " port probe was executed.";
         check.recommendations.push_back("Check --family, --host, --port, and --target arguments.");
     } else if (total_successes == 0) {
-        check.status = Status::FAIL;
-        check.summary = "TCP port unreachable over selected address family.";
-        check.recommendations.push_back("Check DNS records, firewall policy, service listener, route, and whether the target supports the selected IP family.");
+        int udp_timeouts = 0;
+        int udp_icmp = 0;
+        for (const auto& item : stats) {
+            udp_timeouts += item.timeouts;
+            udp_icmp += item.icmp_unreachables;
+        }
+        if (options.port_protocol == "udp" && udp_icmp > 0 && udp_timeouts == 0) {
+            check.status = Status::FAIL;
+            check.summary = "UDP port reported closed (ICMP unreachable).";
+            check.recommendations.push_back("The target returned ICMP port-unreachable; the UDP port is likely closed.");
+        } else if (options.port_protocol == "udp" && udp_timeouts > 0) {
+            check.status = Status::WARN;
+            check.summary = "UDP port did not respond (open/filtered/silent).";
+            check.recommendations.push_back("UDP probes timed out. The port may be open but silent, filtered by a firewall, or the packet was dropped. Try a service-specific payload if possible.");
+        } else {
+            check.status = Status::FAIL;
+            check.summary = std::string(options.port_protocol == "udp" ? "UDP" : "TCP") + " port unreachable over selected address family.";
+            check.recommendations.push_back("Check DNS records, firewall policy, service listener, route, and whether the target supports the selected IP family.");
+        }
     } else if (reachable_groups < static_cast<int>(stats.size()) || total_successes < total_attempts) {
         check.status = Status::WARN;
-        check.summary = "TCP port partially reachable.";
+        check.summary = std::string(options.port_protocol == "udp" ? "UDP" : "TCP") + " port partially reachable.";
         check.recommendations.push_back("One address family or one attempt failed. Compare IPv4/IPv6 DNS, firewall, ISP filtering, and service bind addresses.");
     } else {
         check.status = Status::OK;
-        check.summary = "TCP port reachable over selected address family.";
+        check.summary = std::string(options.port_protocol == "udp" ? "UDP" : "TCP") + " port reachable over selected address family.";
     }
 
     check.details["targets"] = std::to_string(targets.size());
